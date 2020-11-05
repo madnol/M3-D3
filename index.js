@@ -1,21 +1,83 @@
-// window.onload = function () {
-//     let heartOutline = document.querySelector(".loved-track .far.fa-heart");
-//     let heartFilled = document.querySelector(".loved-track .fas.fa-heart");
-//     heartFilled.addEventListener("click", function () {
-//       if (!heartFilled.classList.contains("active")) {
-//         heartFilled.classList.toggle("active");
-//         heartFilled.style.opacity = 1;
-//         heartOutline.style.opacity = 0;
-//       } else {
-//         heartFilled.classList.toggle("active");
-//         heartFilled.style.opacity = 0;
-//         heartOutline.style.opacity = 1;
-//       }
-//     });
-//     fetchData('eminem')
-//        }
+// const getPhotos = (param) => {
+//       fetch(`http://www.splashbase.co/api/v1/images/search?query=${param}`, {
+//         "method": "GET",
+//       })
+//         .then((response) => response.json())
+//         .then((parsedJson) => {
+//           parsedJson.images.forEach(element => {
+//            console.log(element) }
 
-//        const fetchData = (param) => {
+//         },
+const btnFetch = document.querySelectorAll(".btnFetch");
+const containerImgs = document.querySelector(".container-images");
+const btnModalImages = document.querySelectorAll("button");
+let btns = document.getElementsByClassName("btnImageModal");
+
+
+const getPhotos = (param) => {
+  
+  // let cardRow = [];
+
+  fetch(`http://www.splashbase.co/api/v1/images/search?query=${param}`, {
+    "method": "GET",
+  })
+    .then((response) => response.json())
+    .then((parsedJson) => {
+      containerImgs.querySelectorAll('*').forEach(element=>element.remove())
+
+      parsedJson.images.forEach((element) => {
+        const div = document.createElement("div");
+        console.log(element);
+        // for (let i = 0; i < div.length; i++)         
+        div.classList.add("col-md-4")
+        div.classList.add("images-container")
+        div.innerHTML = ` <div class="card mb-4 shadow-sm">
+                                                  <img class="card-img-top" src="${element.url}">
+                                                   <div class="card-body">
+                                                       <p class="card-text">
+                                                           This is a wider card with supporting text below as a natural
+                                                           lead-in to additional content. This content is a little bit
+                                                           longer.
+                                                       </p>
+                                                       <div class="justify-content-between align-items-center">
+                                                           <div class="btn-group">
+                                                               <button type="button" class="btn btn-sm btn-outline-secondary btnImageModal" data-toggle="modal" data-target="#imageModal" imageUrl="${element.url}">
+                                                                   View
+                                                               </button>
+                                                               <button type="button" class="btn btn-sm btn-outline-secondary btnHide" onclick="hideToggle()">
+                                                                   Hide
+                                                               </button>
+                                                           </div>
+                                                           <small class="text-muted">${element.id}</small>
+                                                       </div>
+                                                   </div>
+                                               </div>`;
+        // cardRow.push(div);
+        containerImgs.appendChild(div);
+
+      });
+      
+    });
+    
+};
+
+const hideToggle = () => {
+  let allCards = document.querySelectorAll(".images-container")
+  let btnsHide = document.querySelectorAll(".btnHide")
+  for (let i = 0; i < btnsHide.length; i++) {
+    btnsHide[i].onclick = function(){
+          allCards[i].style.display = "none";
+      }    
+  }
+
+}
+const btn = document.querySelector('.search-btn')
+btn.addEventListener('click', function(e){
+  e.preventDefault()
+  const input = document.querySelector('.form-control').value
+  getPhotos(input)
+})
+//  const fetchData = (param) => {
 //          let parent = document.querySelector(".highlighted-albums")
 //          let cardRow = []
 //         fetch(`https://rapidapi.p.rapidapi.com/search?q=${param}`, {
@@ -53,74 +115,3 @@
 //           console.error(err);
 //         });
 //        };
-
-const getPhotos = () => {
-let parent = document.querySelector(".photo-container")
-let photos = []
-  fetch("http://www.splashbase.co/api/v1/images/search?query=beach", {
-    "method": "GET",
-  })
-    .then((response) => response.json())
-    .then((parsedJson) => {
-      parsedJson.data.forEach(element => {
-       console.log(element)
-    let image = `<img
-    class="bd-placeholder-img card-img-top"
-    width="100%"
-    height="225"
-    xmlns="${element.image.url}"
-    preserveAspectRatio="xMidYMid slice"
-    focusable="false"
-    role="img"
-    aria-label="Placeholder: Thumbnail"
-  >
-    <title>Placeholder</title>
-    <rect width="100%" height="100%" fill="#55595c" />
-    <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-      Thumbnail
-    </text>
-  </img> -->`
-
-  photos.push(image)
-                });
-                parent.innerHTML = photos.join('')
-              })
-              .catch(err => {
-                console.error(err);
-              });
-             };
-      
-
-//       let images = parsedJson.data;
-//       for (let i = 0; i < images.length; i++) {
-//         let image = images[i];
-//       }
-//     });
-// };
-
-// let image =
-
-//     `<svg
-//       class="bd-placeholder-img card-img-top"
-//       width="100%"
-//       height="225"
-//       xmlns="${element.url}"
-//       preserveAspectRatio="xMidYMid slice"
-//       focusable="false"
-//       role="img"
-//       aria-label="Placeholder: Thumbnail"
-//     >
-//       <title>Placeholder</title>
-//       <rect width="100%" height="100%" fill="#55595c" />
-//       <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-//         ${element.id}
-//       </text>
-//     </svg>`
-//     photos.push(image)
-//               });
-//               parent.innerHTML = photos.join('')
-//             })
-//             .catch(err => {
-//               console.error(err);
-//             });
-//            };
